@@ -16,7 +16,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 SECRET_KEY = os.getenv('SECRET_KEY', 'django-insecure-i&@!wo*^e7ioyuf#^ei^lix&u2+dh(_qs2s*t&1wxw3d^8^woi')  # Asegúrate de definir esta clave en tu archivo .env
 DEBUG = os.getenv('DEBUG', 'True') == 'True'  # Cargar desde .env (True por defecto)
-ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS', '.railway.app').split(',')  # Asegúrate de que este valor esté correctamente configurado en .env
+ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS', '.railway.app','backend-production-1d4d.up.railway.app').split(',')  # Asegúrate de que este valor esté correctamente configurado en .env
 
 # ─────────────────────────────────────
 # INSTALLED APPS
