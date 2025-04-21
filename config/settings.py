@@ -3,35 +3,34 @@ from pathlib import Path
 from datetime import timedelta
 from corsheaders.defaults import default_headers
 
+import dj_database_url
+from dotenv import load_dotenv
+
+# Cargar variables de entorno desde el archivo .env
+load_dotenv()
+
 # ─────────────────────────────────────
 # BASE CONFIG
 # ─────────────────────────────────────
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-SECRET_KEY = 'django-insecure-i&@!wo*^e7ioyuf#^ei^lix&u2+dh(_qs2s*t&1wxw3d^8^woi'
-DEBUG = True
-#ALLOWED_HOSTS = ['.onrender.com']
-ALLOWED_HOSTS = ['127.0.0.1', 'localhost', '0.0.0.0']
-
+SECRET_KEY = os.getenv('SECRET_KEY', 'django-insecure-i&@!wo*^e7ioyuf#^ei^lix&u2+dh(_qs2s*t&1wxw3d^8^woi')  # Asegúrate de definir esta clave en tu archivo .env
+DEBUG = os.getenv('DEBUG', 'True') == 'True'  # Cargar desde .env (True por defecto)
+ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS', '').split(',')
 
 # ─────────────────────────────────────
 # INSTALLED APPS
 # ─────────────────────────────────────
 INSTALLED_APPS = [
-    # Django apps
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-
-    # Terceros
     'corsheaders',
     'rest_framework',
     'django_filters',
-
-    # Apps propias
     'apps.auth_app',
     'apps.usuarios',
     'apps.productos',
@@ -51,7 +50,7 @@ INSTALLED_APPS = [
 # MIDDLEWARE
 # ─────────────────────────────────────
 MIDDLEWARE = [
-    'corsheaders.middleware.CorsMiddleware',  # ← Importante que esté primero
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -85,16 +84,22 @@ WSGI_APPLICATION = 'config.wsgi.application'
 # ─────────────────────────────────────
 # DATABASE
 # ─────────────────────────────────────
+
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'ventas',
-        'USER': 'postgres',
-        'PASSWORD': '123456',
-        'HOST': 'localhost',
-        'PORT': '5432',
-    }
+    'default': dj_database_url.config(default=os.getenv('DATABASE_URL'))
 }
+
+#DATABASES = {
+#    'default': {
+#        'ENGINE': 'django.db.backends.postgresql',
+#        'NAME': 'ventas',
+#        'USER': 'postgres',
+#        'PASSWORD': '123456',
+#        'HOST': 'localhost',  # Asegúrate de que este nombre de host sea correcto
+#        'PORT': '5432',  # O el puerto correcto si es diferente
+#    }
+#}
+
 
 # ─────────────────────────────────────
 # AUTH
@@ -134,7 +139,6 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 # REST FRAMEWORK
 # ─────────────────────────────────────
 REST_FRAMEWORK = {
-    # Sólo JWTAuthentication (no SessionAuthentication → no chequeo CSRF)
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework_simplejwt.authentication.JWTAuthentication',
     ),
@@ -154,30 +158,19 @@ REST_FRAMEWORK = {
 # CORS CONFIG
 # ─────────────────────────────────────
 CORS_ALLOW_CREDENTIALS = True
-CORS_ALLOWED_ORIGINS = [
-    "http://localhost:5173",
-    "http://localhost:5174",
-]
+CORS_ALLOWED_ORIGINS = os.getenv('CORS_ALLOWED_ORIGINS', 'http://localhost:5173,http://localhost:5174').split(',')
 CORS_ALLOW_METHODS = [
-    "DELETE",
-    "GET",
-    "OPTIONS",
-    "PATCH",
-    "POST",
-    "PUT",
+    "DELETE", "GET", "OPTIONS", "PATCH", "POST", "PUT",
 ]
 CORS_ALLOW_HEADERS = list(default_headers) + [
     'X-CSRFToken',
     'Authorization',
     'Content-Type',
 ]
-CSRF_TRUSTED_ORIGINS = [
-    "http://localhost:5173",
-    "http://localhost:5174",
-]
+CSRF_TRUSTED_ORIGINS = os.getenv('CSRF_TRUSTED_ORIGINS', 'http://localhost:5173,http://localhost:5174').split(',')
 
 # ─────────────────────────────────────
-# OTRAS KEYS (por ejemplo Stripe)
+# STRIPE KEYS
 # ─────────────────────────────────────
 STRIPE_SECRET_KEY = os.getenv("STRIPE_SECRET_KEY", "")
 STRIPE_PUBLISHABLE_KEY = os.getenv("STRIPE_PUBLISHABLE_KEY", "")
