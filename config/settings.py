@@ -16,7 +16,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 SECRET_KEY = os.getenv('SECRET_KEY', 'django-insecure-i&@!wo*^e7ioyuf#^ei^lix&u2+dh(_qs2s*t&1wxw3d^8^woi')  # Asegúrate de definir esta clave en tu archivo .env
 DEBUG = os.getenv('DEBUG', 'True') == 'True'  # Cargar desde .env (True por defecto)
-ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS', '').split(',')
+ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS', '.railway.app').split(',')  # Asegúrate de que este valor esté correctamente configurado en .env
 
 # ─────────────────────────────────────
 # INSTALLED APPS
@@ -84,22 +84,9 @@ WSGI_APPLICATION = 'config.wsgi.application'
 # ─────────────────────────────────────
 # DATABASE
 # ─────────────────────────────────────
-
 DATABASES = {
-    'default': dj_database_url.config(default=os.getenv('DATABASE_URL'))
+    'default': dj_database_url.config(default=os.getenv('DATABASE_URL'))  # Asegúrate de que DATABASE_URL esté correctamente configurado en .env
 }
-
-#DATABASES = {
-#    'default': {
-#        'ENGINE': 'django.db.backends.postgresql',
-#        'NAME': 'ventas',
-#        'USER': 'postgres',
-#        'PASSWORD': '123456',
-#        'HOST': 'localhost',  # Asegúrate de que este nombre de host sea correcto
-#        'PORT': '5432',  # O el puerto correcto si es diferente
-#    }
-#}
-
 
 # ─────────────────────────────────────
 # AUTH
@@ -158,7 +145,7 @@ REST_FRAMEWORK = {
 # CORS CONFIG
 # ─────────────────────────────────────
 CORS_ALLOW_CREDENTIALS = True
-CORS_ALLOWED_ORIGINS = os.getenv('CORS_ALLOWED_ORIGINS', 'http://localhost:5173,http://localhost:5174').split(',')
+CORS_ALLOWED_ORIGINS = os.getenv('CORS_ALLOWED_ORIGINS', 'http://localhost:5173,http://localhost:5174,https://respectful-benevolence.up.railway.app').split(',')  # Incluye la URL pública de Railway
 CORS_ALLOW_METHODS = [
     "DELETE", "GET", "OPTIONS", "PATCH", "POST", "PUT",
 ]
@@ -167,7 +154,7 @@ CORS_ALLOW_HEADERS = list(default_headers) + [
     'Authorization',
     'Content-Type',
 ]
-CSRF_TRUSTED_ORIGINS = os.getenv('CSRF_TRUSTED_ORIGINS', 'http://localhost:5173,http://localhost:5174').split(',')
+CSRF_TRUSTED_ORIGINS = os.getenv('CSRF_TRUSTED_ORIGINS', 'http://localhost:5173,http://localhost:5174,https://respectful-benevolence.up.railway.app').split(',')  # Asegúrate de incluir la URL pública
 
 # ─────────────────────────────────────
 # STRIPE KEYS
@@ -184,5 +171,3 @@ SIMPLE_JWT = {
     'REFRESH_TOKEN_LIFETIME': timedelta(days=1),
     'AUTH_HEADER_TYPES': ('Bearer',),
 }
-
-ALLOWED_HOSTS = ['.railway.app', 'localhost', '127.0.0.1']
