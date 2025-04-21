@@ -184,3 +184,7 @@ SIMPLE_JWT = {
     'REFRESH_TOKEN_LIFETIME': timedelta(days=1),
     'AUTH_HEADER_TYPES': ('Bearer',),
 }
+
+# Verificar que las variables estén correctamente cargadas
+print(f"SECRET_KEY: {os.getenv('SECRET_KEY')}")
+print(f"DATABASE_URL: {os.getenv('DATABASE_URL')}")
