@@ -147,7 +147,12 @@ REST_FRAMEWORK = {
 # CORS CONFIG
 # ─────────────────────────────────────
 CORS_ALLOW_CREDENTIALS = True
-CORS_ALLOWED_ORIGINS = os.getenv('CORS_ALLOWED_ORIGINS', 'http://localhost:5173, http://localhost:5174, https://respectful-benevolence.up.railway.app', 'https://vocal-cocada-45fccb.netlify.app/').split(',')  # Incluye la URL pública de Railway
+
+CORS_ALLOWED_ORIGINS = os.getenv(
+    'CORS_ALLOWED_ORIGINS',
+    'http://localhost:5173,http://localhost:5174,https://respectful-benevolence.up.railway.app,https://vocal-cocada-45fccb.netlify.app/'
+).split(',')
+
 CORS_ALLOW_METHODS = [
     "DELETE", "GET", "OPTIONS", "PATCH", "POST", "PUT",
 ]
