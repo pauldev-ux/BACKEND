@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     'apps.recomendaciones',
     'apps.notificaciones',
     'apps.carrito',
+    'apps.cart',
 ]
 
 # ─────────────────────────────────────
@@ -146,7 +147,7 @@ REST_FRAMEWORK = {
 # CORS CONFIG
 # ─────────────────────────────────────
 CORS_ALLOW_CREDENTIALS = True
-CORS_ALLOWED_ORIGINS = os.getenv('CORS_ALLOWED_ORIGINS', 'http://localhost:5173,http://localhost:5174,https://respectful-benevolence.up.railway.app').split(',')  # Incluye la URL pública de Railway
+CORS_ALLOWED_ORIGINS = os.getenv('CORS_ALLOWED_ORIGINS', 'http://localhost:5173, http://localhost:5174, https://respectful-benevolence.up.railway.app', 'https://vocal-cocada-45fccb.netlify.app/').split(',')  # Incluye la URL pública de Railway
 CORS_ALLOW_METHODS = [
     "DELETE", "GET", "OPTIONS", "PATCH", "POST", "PUT",
 ]
@@ -163,6 +164,7 @@ CSRF_TRUSTED_ORIGINS = os.getenv('CSRF_TRUSTED_ORIGINS', 'http://localhost:5173,
 STRIPE_SECRET_KEY = os.getenv("STRIPE_SECRET_KEY", "")
 STRIPE_PUBLISHABLE_KEY = os.getenv("STRIPE_PUBLISHABLE_KEY", "")
 STRIPE_WEBHOOK_SECRET = os.getenv("STRIPE_WEBHOOK_SECRET", "")
+
 
 # ─────────────────────────────────────
 # SIMPLE JWT
