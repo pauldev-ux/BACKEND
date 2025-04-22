@@ -150,7 +150,7 @@ CORS_ALLOW_CREDENTIALS = True
 
 CORS_ALLOWED_ORIGINS = os.getenv(
     'CORS_ALLOWED_ORIGINS',
-    'http://localhost:5173,http://localhost:5174,https://respectful-benevolence.up.railway.app,https://vocal-cocada-45fccb.netlify.app/'
+    'http://localhost:5173,http://localhost:5174,https://respectful-benevolence.up.railway.app,https://luxury-wisp-fa3dbf.netlify.app/'
 ).split(',')
 
 CORS_ALLOW_METHODS = [
