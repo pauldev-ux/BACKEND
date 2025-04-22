@@ -1,19 +1,18 @@
-# apps/reportes/exports/sales_pdf_exporter.py
 
 from reportlab.pdfgen import canvas
 from reportlab.lib.pagesizes import letter
 from io import BytesIO
-from django.http import HttpResponse
+from django.core.files import File
+from django.http import FileResponse
+from django.utils import timezone
+import os
+from apps.reportes.models import Reporte
 
-def export_sales_to_pdf(ventas):
-    """
-    Genera un PDF con:
-      ID | Usuario | Total | Estado | Fecha Creación
-    """
+
+def export_sales_to_pdf(ventas, user_id):
     buffer = BytesIO()
     c = canvas.Canvas(buffer, pagesize=letter)
     width, height = letter
-
     y = height - 50
     c.setFont("Helvetica-Bold", 16)
     c.drawString(50, y, "Reporte de Ventas")
@@ -42,6 +41,21 @@ def export_sales_to_pdf(ventas):
 
     c.save()
     buffer.seek(0)
-    response = HttpResponse(buffer, content_type="application/pdf")
-    response["Content-Disposition"] = 'attachment; filename="ventas.pdf"'
-    return response
+
+    filename = f"reporte_ventas_{timezone.now().strftime('%Y%m%d%H%M%S')}.pdf"
+    filepath = os.path.join('media', 'reportes', filename)
+    os.makedirs(os.path.dirname(filepath), exist_ok=True)
+
+    with open(filepath, 'wb') as f:
+        f.write(buffer.getvalue())
+
+    reporte = Reporte.objects.create(
+        titulo="Reporte de ventas (PDF)",
+        descripcion="Generado automáticamente",
+        tipo_reporte="PDF",
+        usuario_id=user_id,
+        archivo=f"reportes/{filename}"
+    )
+
+    return FileResponse(open(filepath, 'rb'), as_attachment=True, filename=filename)
+

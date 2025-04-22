@@ -150,7 +150,7 @@ REST_FRAMEWORK = {
 CORS_ALLOW_CREDENTIALS = True
 CORS_ALLOWED_ORIGINS = os.getenv(
     'CORS_ALLOWED_ORIGINS',
-    'http://localhost:5173,http://localhost:5174,https://luxury-wisp-fa3dbf.netlify.app'
+    'http://localhost:5173,http://localhost:5174,https://poetic-syrniki-616839.netlify.app/'
 ).split(',')
 
 CORS_ALLOW_METHODS = [

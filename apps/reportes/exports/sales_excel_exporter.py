@@ -1,19 +1,16 @@
-# apps/reportes/exports/sales_excel_exporter.py
 
 import openpyxl
 from openpyxl.workbook import Workbook
-from django.http import HttpResponse
+from django.http import FileResponse
+from django.utils import timezone
+from apps.reportes.models import Reporte
+import os
 
-def export_sales_to_excel(ventas):
-    """
-    Genera un Excel (.xlsx) con:
-      ID | Usuario | Total | Estado | Fecha Creación
-    """
+
+def export_sales_to_excel(ventas, user_id):
     wb = Workbook()
     ws = wb.active
     ws.title = "Ventas"
-
-    # Encabezados
     ws.append(["ID", "Usuario", "Total", "Estado", "Fecha Creación"])
 
     for v in ventas:
@@ -25,9 +22,18 @@ def export_sales_to_excel(ventas):
             v.created_at.strftime("%Y-%m-%d %H:%M:%S"),
         ])
 
-    response = HttpResponse(
-        content_type="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+    filename = f"reporte_ventas_{timezone.now().strftime('%Y%m%d%H%M%S')}.xlsx"
+    filepath = os.path.join('media', 'reportes', filename)
+    os.makedirs(os.path.dirname(filepath), exist_ok=True)
+
+    wb.save(filepath)
+
+    Reporte.objects.create(
+        titulo="Reporte de ventas (Excel)",
+        descripcion="Generado automáticamente",
+        tipo_reporte="EXCEL",
+        usuario_id=user_id,
+        archivo=f"reportes/{filename}"
     )
-    response["Content-Disposition"] = 'attachment; filename="ventas.xlsx"'
-    wb.save(response)
-    return response
+
+    return FileResponse(open(filepath, 'rb'), as_attachment=True, filename=filename)
