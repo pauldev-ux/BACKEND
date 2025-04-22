@@ -12,12 +12,12 @@ load_dotenv()
 # ─────────────────────────────────────
 # BASE CONFIG
 # ─────────────────────────────────────
-BASE_DIR = Path(__file__).resolve().parent.parent
+BASE_DIR = Path(__file__).resolve().parent.parent  # ← Corregido _file
 
-SECRET_KEY = os.getenv('SECRET_KEY', 'django-insecure-i&@!wo*^e7ioyuf#^ei^lix&u2+dh(_qs2s*t&1wxw3d^8^woi')  # Asegúrate de definir esta clave en tu archivo .env
-DEBUG = os.getenv('DEBUG', 'True') == 'True'  # Cargar desde .env (True por defecto)
-ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS', '.railway.app').split(',')
-ALLOWED_HOSTS.append('backend-production-1d4d.up.railway.app')
+SECRET_KEY = os.getenv('SECRET_KEY', 'django-insecure-i&@!wo*^e7ioyuf#^ei^lix&u2+dh(_qs2s*t&1wxw3d^8^woi')
+DEBUG = os.getenv('DEBUG', 'True') == 'True'
+ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS', 'localhost,127.0.0.1,.railway.app').split(',')
+ALLOWED_HOSTS += ['backend-production-1d4d.up.railway.app']
 
 # ─────────────────────────────────────
 # INSTALLED APPS
@@ -52,10 +52,11 @@ INSTALLED_APPS = [
 # MIDDLEWARE
 # ─────────────────────────────────────
 MIDDLEWARE = [
-    'corsheaders.middleware.CorsMiddleware',
+    'corsheaders.middleware.CorsMiddleware',  # ← debe estar antes de CommonMiddleware
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
+    'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
@@ -87,7 +88,7 @@ WSGI_APPLICATION = 'config.wsgi.application'
 # DATABASE
 # ─────────────────────────────────────
 DATABASES = {
-    'default': dj_database_url.config(default=os.getenv('DATABASE_URL'))  # Asegúrate de que DATABASE_URL esté correctamente configurado en .env
+    'default': dj_database_url.config(default=os.getenv('DATABASE_URL'))
 }
 
 # ─────────────────────────────────────
@@ -147,10 +148,9 @@ REST_FRAMEWORK = {
 # CORS CONFIG
 # ─────────────────────────────────────
 CORS_ALLOW_CREDENTIALS = True
-
 CORS_ALLOWED_ORIGINS = os.getenv(
     'CORS_ALLOWED_ORIGINS',
-    'http://localhost:5173,http://localhost:5174,https://respectful-benevolence.up.railway.app,https://luxury-wisp-fa3dbf.netlify.app/'
+    'http://localhost:5173,http://localhost:5174,https://luxury-wisp-fa3dbf.netlify.app'
 ).split(',')
 
 CORS_ALLOW_METHODS = [
@@ -161,7 +161,11 @@ CORS_ALLOW_HEADERS = list(default_headers) + [
     'Authorization',
     'Content-Type',
 ]
-CSRF_TRUSTED_ORIGINS = os.getenv('CSRF_TRUSTED_ORIGINS', 'http://localhost:5173,http://localhost:5174,https://respectful-benevolence.up.railway.app').split(',')  # Asegúrate de incluir la URL pública
+
+CSRF_TRUSTED_ORIGINS = os.getenv(
+    'CSRF_TRUSTED_ORIGINS',
+    'http://localhost:5173,http://localhost:5174,https://luxury-wisp-fa3dbf.netlify.app'
+).split(',')
 
 # ─────────────────────────────────────
 # STRIPE KEYS
@@ -169,7 +173,6 @@ CSRF_TRUSTED_ORIGINS = os.getenv('CSRF_TRUSTED_ORIGINS', 'http://localhost:5173,
 STRIPE_SECRET_KEY = os.getenv("STRIPE_SECRET_KEY", "")
 STRIPE_PUBLISHABLE_KEY = os.getenv("STRIPE_PUBLISHABLE_KEY", "")
 STRIPE_WEBHOOK_SECRET = os.getenv("STRIPE_WEBHOOK_SECRET", "")
-
 
 # ─────────────────────────────────────
 # SIMPLE JWT
