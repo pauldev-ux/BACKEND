@@ -8,4 +8,3 @@ urlpatterns = [
     path('<int:usuario_id>/pago/'      , RealizarPagoView.as_view(),    name='carrito-pago'),
     path('<int:usuario_id>/recibo/'    , GenerarReciboView.as_view(),   name='carrito-recibo'),
 ]
-    

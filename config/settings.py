@@ -164,7 +164,7 @@ CORS_ALLOW_HEADERS = list(default_headers) + [
 
 CSRF_TRUSTED_ORIGINS = os.getenv(
     'CSRF_TRUSTED_ORIGINS',
-    'http://localhost:5173,http://localhost:5174,https://poetic-syrniki-616839.netlify.app'
+    'http://localhost:5173,http://localhost:5174,https://symphonious-boba-47363a.netlify.app/'
 ).split(',')
 
 # ─────────────────────────────────────
